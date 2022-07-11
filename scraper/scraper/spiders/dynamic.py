@@ -19,7 +19,7 @@ class DynamicSpider(scrapy.Spider):
         'DOWNLOADER_MIDDLEWARES': {
             'scraper.middlewares.PlaywrightMiddleware': 100,
         },
-        'LOG_LEVEL': 'WARNING',
+        'LOG_LEVEL': 'INFO',
         'FEEDS': {
             f'{EXPORT_DATA}/dynamic.csv': {
                 'format': 'csv',
@@ -53,9 +53,11 @@ class DynamicSpider(scrapy.Spider):
 
         with open(f'{self.EXPORT_FILES}/image.png', 'wb') as file:
             file.write(response.meta['screenshot'])
+            self.logger.info(f'Saved screenshot to {self.EXPORT_FILES}/image.png')
         
         with open(f'{self.EXPORT_FILES}/page.pdf', 'wb') as file:
             file.write(response.meta['pdf'])
+            self.logger.info(f'Saved pdf to {self.EXPORT_FILES}/page.pdf')
         
         locations = response.css('li.store-item__wrapper')
         for location in locations:
