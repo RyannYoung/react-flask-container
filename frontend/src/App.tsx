@@ -1,6 +1,6 @@
 import { faSearch, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSpring, animated, useTransition } from "react-spring";
 import logo from "./logo.svg";
 
@@ -13,6 +13,7 @@ const App = () => {
   const [res, setRes] = useState<IResponse>();
   const [scrape, setScrape] = useState("");
   const [show, setShow] = useState(false);
+  const [options, setOptions] = useState([]);
 
   async function handleClick() {
     setShow(true);
@@ -27,6 +28,26 @@ const App = () => {
       });
     }
   }
+
+  async function schedule(){
+    const res = await fetch("http://localhost:5000/schedule?scraper=dynamic");
+    const json = await res.json();
+    console.log(json)
+  }
+
+  async function getOptions() {
+    try {
+      const res = await fetch("http://localhost:6800/listspiders.json?project=scraper");
+      const json = await res.json();
+      setOptions(json.spiders);
+    } catch (error) {
+      setOptions([]);
+    }
+  }
+
+  useEffect(() => {
+    getOptions();
+  }, []);
 
   const anim = useSpring({
     from: { opacity: 0 },
@@ -105,7 +126,15 @@ const App = () => {
                     className="file:rounded-md file:btn flex-1"
                   />
                 </div>
-                <button className="btn">
+                <div>
+                <select className="select select-bordered w-full max-w-xs">
+                  <option disabled selected>Select Scraper</option>
+                  {options.map((option) => (
+                    <option key={option}>{option}</option>
+                  ))}
+                </select>
+                </div>
+                <button onClick={schedule} className="btn">
                   <FontAwesomeIcon icon={faSearch} className="mr-2" />
                   Scrape
                 </button>
