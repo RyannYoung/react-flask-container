@@ -6,6 +6,12 @@ __pycache__/
 # Virtual Environment
 .venv/
 
+# Scraper utils
+scraper/scrapyd/dbs/
+scraper/scrapyd/eggs/*
+scraper/scrapyd/exports/*
+scraper/scrapyd/logs/*
+
 # C extensions
 *.so
 
@@ -15,8 +21,6 @@ build/
 develop-eggs/
 dist/
 downloads/
-scraper/scrapyd/*
-scraper/scrapyd/export/*
 backend/__pycache__/
 .eggs/
 lib/
