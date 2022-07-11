@@ -1,0 +1,15 @@
+FROM node:16.14.0
+
+WORKDIR /app/frontend
+
+#Install dependencies
+COPY package.json /app/frontend/package.json
+
+RUN npm install
+
+COPY . /app/frontend
+
+EXPOSE 3000
+
+CMD ["npm", "start"]
+
