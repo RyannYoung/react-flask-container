@@ -1,0 +1,15 @@
+FROM python:latest
+
+WORKDIR /app/backend
+
+# Install dependencies
+COPY ./requirements.txt /app/backend/requirements.txt
+RUN pip install -r requirements.txt
+
+# Add the remaining files
+COPY . /app/backend
+
+# Make port available for the application
+EXPOSE 5000
+
+CMD ["flask", "run", "--host=0.0.0.0"]

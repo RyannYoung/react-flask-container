@@ -1,0 +1,5 @@
+Flask==2.1.2
+Flask_Cors==3.0.10
+itemadapter==0.6.0
+playwright==1.23.0
+Scrapy==2.6.1
