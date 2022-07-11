@@ -19,3 +19,14 @@ services:
       - backend
     stdin_open: true
     tty: true
+  scraper:
+    build: ./scraper
+    volumes:
+      - ./scraper:/app/scraper
+    ports:
+      - "6800:6800"
+    stdin_open: true
+    tty: true
+    command: ["scrapyd", "--rundir=/app/scraper/scrapyd"]  
+
+  
