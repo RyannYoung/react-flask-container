@@ -15,8 +15,8 @@ build/
 develop-eggs/
 dist/
 downloads/
-scraper/scrapyd/eggs/
-scraper/scrapyd/dbs/
+scraper/scrapyd/*
+backend/__pycache__/
 .eggs/
 lib/
 lib64/
