@@ -3,3 +3,5 @@ playwright==1.23.0
 Scrapy==2.6.1
 scrapyd==1.3.0
 git+https://github.com/scrapy/scrapyd-client.git
+pywin32==304
+
