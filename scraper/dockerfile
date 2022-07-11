@@ -5,3 +5,7 @@ WORKDIR /app/scraper
 COPY requirements.txt /app/scraper/requirements.txt
 
 RUN pip install -r requirements.txt
+
+EXPOSE 6800
+
+CMD ["scrapyd"]

@@ -15,7 +15,8 @@ build/
 develop-eggs/
 dist/
 downloads/
-eggs/
+scraper/scrapyd/eggs/
+scraper/scrapyd/dbs/
 .eggs/
 lib/
 lib64/
