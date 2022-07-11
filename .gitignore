@@ -16,6 +16,7 @@ develop-eggs/
 dist/
 downloads/
 scraper/scrapyd/*
+scraper/scrapyd/export/*
 backend/__pycache__/
 .eggs/
 lib/
