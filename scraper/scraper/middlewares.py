@@ -3,11 +3,15 @@
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
+from asyncio.windows_events import NULL
 from scrapy import signals
 from scrapy.crawler import Crawler
 from scrapy.http import HtmlResponse
 from scraper.utils.PlaywrightRequest import PlaywrightRequest
 from playwright.sync_api import sync_playwright
+from pywebcopy import save_webpage
+from PIL import Image
+import io
 
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
@@ -34,10 +38,17 @@ class PlaywrightMiddleware:
             content = page.content()
 
             if(request.screenshot):
-                request.meta['screenshot'] = page.screenshot(full_page=True)
-        
+                request.meta['screenshot'] = page.screenshot(full_page=True)                
+
             if(request.pdf):
-                request.meta['pdf'] = page.pdf()
+                page.emulate_media(media='screen')
+
+                if(request.screenshot):
+                    image = Image.open(io.BytesIO(request.meta['screenshot']))
+                    print(f'width {image.width} height {image.height}')
+                    request.meta['pdf'] = page.pdf(width=f"{image.width}px", height=f'{image.height}px', print_background=True)
+                else:
+                    request.meta['pdf'] = page.pdf(width="1920px", height="1080px")
         
             browser.close()
     
@@ -50,7 +61,45 @@ class PlaywrightMiddleware:
     
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
+    
+class ViewMiddleware:
 
+    @classmethod
+    def from_crawler(cls, crawler):
+        spider = cls()
+        crawler.signals.connect(spider.spider_opened, signal=signals.spider_opened)
+        return spider
+    
+    def process_request(self, request, spider):
+
+        print(request.url)
+
+        if request.url.endswith('.txt'):
+            return None
+
+        save_webpage(
+            url=request.url,
+            project_folder="../exports/view",
+            project_name="view",
+            bypass_robots=True,
+            open_in_browser=True,
+            debug=True,
+            threaded=False
+        )
+
+        return HtmlResponse(
+            request.url,
+            body=request.body,
+            encoding="utf-8",
+            request=request
+        )
+
+    def process_response(self, request, response, spider):
+        print(response.url)
+        return response
+    
+    def spider_opened(self, spider):
+        spider.logger.info('Spider opened: %s' % spider.name)
 
 class ScraperSpiderMiddleware:
     # Not all methods need to be defined. If a method is not defined,
